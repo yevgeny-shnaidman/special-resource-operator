@@ -51,3 +51,13 @@ See `charts/example` for some examples. In particular:
 
 There is a general problem when trying to configure a cluster with a special resource. One does not know which nodes have a special resource and which do not. To address this, SRO relies on the [NFD operator](https://github.com/openshift/cluster-nfd-operator). NFD will label the host with node specific attributes, like PCI cards, kernel or OS version and more. The .yaml template files in a special resource recipe can use these NFD labels in their nodeSelector fields to ensure that the software stack is run only on the nodes with the hardware feature. See [upstream NFD](https://github.com/kubernetes-sigs/node-feature-discovery) for more info. 
 
+# Compiling using skipper
+Skipper is the utility that allows running all Makefile commands in a container. Container's image contains all the necessary packages, and the SRO code on the host is mapped into the running container. Using skipper allows user to keep his system free of any installation needed for a compilation, and easily switch between different projects, without need to update/install new packages. Change to any package needed by the project will be automitically forawarded to other users, once they pulled the code from the github
+
+Commands:
+skipper build - prepare the image that will be used for executing Makefile command. It can be built once, no need to rebuild it, unless Dockerfile.special-resource-operator-build has been updated
+
+skipper make <command> equivalent to make <command>
+
+Limitations:
+Currently docker needs to be installed on the host, in case local image needs to be built and pushed into a remote repository.
