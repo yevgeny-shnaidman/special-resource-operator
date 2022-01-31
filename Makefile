@@ -81,7 +81,7 @@ unit-test:
 ##@ Build
 
 helm-plugins/cm-getter/cm-getter: $(shell find cmd/helm-cm-getter -type f -name '*.go')
-	go build -mod=readonly -o $@ ./cmd/helm-cm-getter
+	CGO_ENABLED=0 GO111MODULE=on GOARCH=arm64 GOOS=linux go build -o $@ ./cmd/helm-cm-getter
 
 .PHONY: helm-plugins/cm-getter
 helm-plugins/cm-getter: helm-plugins/cm-getter/cm-getter
@@ -90,7 +90,7 @@ helm-plugins/cm-getter: helm-plugins/cm-getter/cm-getter
 helm-plugins: helm-plugins/cm-getter
 
 manager: generate ## Build manager binary.
-	go build -mod=readonly -o manager main.go
+	CGO_ENABLED=0 GO111MODULE=on GOARCH=arm64 GOOS=linux go build -o manager main.go
 
 run: manifests generate ## Run against the configured Kubernetes cluster in ~/.kube/config
 	go run -mod=readonly ./main.go
